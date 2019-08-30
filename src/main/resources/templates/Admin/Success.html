@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+
+    <link rel="stylesheet" href="../css/weui.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body ontouchstart>
+
+<div class="weui-msg">
+    <div class="weui-msg__icon-area"><i th:class="${stype eq '1'}?'weui-icon-success weui-icon_msg':'weui-icon-warn weui-icon_msg'"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title" th:text="${stype eq '1'}?'付款成功':'付款失败'"></h2>
+        <p th:text="${message}" class="weui-msg__desc"></p>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="/admin/user" class="weui-btn weui-btn_primary">返回上一次</a>
+                    </p>
+    </div>
+    <div class="weui-msg__extra-area">
+        <div class="weui-footer">
+            <p class="weui-footer__links">
+                <a href="javascript:void(0);" class="weui-footer__link">底部链接文本</a>
+            </p>
+            <p class="weui-footer__text">Copyright © 2008-2016 weui.io</p>
+        </div>
+    </div>
+</div>
+<script src="../lib/jquery-2.1.4.js"></script>
+<script src="../lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script src="../js/jquery-weui.js"></script>
+
+</body>
+</html>

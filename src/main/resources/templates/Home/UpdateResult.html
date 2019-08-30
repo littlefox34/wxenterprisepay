@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加结果</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="../css/weui.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+<header class='demos-header'>
+    <h1 th:text="${result eq 1}? '录入成功':'录入失败'" class="demos-title"></h1>
+</header>
+
+<script src="../scripts/jquery-2.1.4.min.js"></script>
+<script src="../scripts/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script src="../scripts/jquery-weui-1.2.1.min.js"></script>
+
+
+<script>
+    $("#showTooltips").click(function() {
+        $.toptip('提交成功', 'success');
+    });
+</script>
+
+</body>
+
+</html>

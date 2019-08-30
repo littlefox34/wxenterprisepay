@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>付款用户列表</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="../css/weui.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class='demos-header'>
+    <h1 class="demos-title">列表</h1>
+</header>
+<div id="list">
+<div class="weui-cells__title">付款用户列表</div>
+<div class="weui-cells">
+
+    <a th:each="user : ${userlist}" class="weui-cell weui-cell_access" href="javascript:void(0);">
+        <div class="weui-cell__bd">
+            <p th:text="${user.truename}" th:data-id="${user.openid}"></p>
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </a>
+</div>
+</div>
+<div id="form" style="display: none">
+<div class="weui-cells__title">请输入金额(元) <span></span></div>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <input id="amount" class="weui-input" type="number" pattern="[0-9]*" value="0" />
+            <input type="hidden" id="openid" /><input type="hidden" id="truename" />
+        </div>
+    </div>
+</div>
+<div class="weui-btn-area">
+    <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">付款</a>
+</div>
+</div>
+<script src="../scripts/jquery-2.1.4.min.js"></script>
+<script src="../scripts/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script src="../scripts/jquery-weui-1.2.1.min.js"></script>
+<script language="javascript" type="text/javascript">
+
+
+    $(function(){
+        Date.prototype.pattern=function(fmt) {
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12, //小时
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            var week = {
+                "0": "/u65e5",
+                "1": "/u4e00",
+                "2": "/u4e8c",
+                "3": "/u4e09",
+                "4": "/u56db",
+                "5": "/u4e94",
+                "6": "/u516d"
+            };
+            if (/(y+)/.test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            }
+            if (/(E+)/.test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[this.getDay() + ""]);
+            }
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                }
+            }
+            return fmt;
+        }
+
+        $(".weui-cells").on("click", "a", function(){
+            $(this).addClass("listbackground");
+            $("#openid").val($(this).find("p").data("id"));
+            $("#truename").val($(this).find("p").text());
+            $(".weui-cells__title > span").text($(this).find("p").text());
+            $("#form").show();
+        })
+
+        $("#showTooltips").click(function(){
+            var amount = parseInt($("#amount").val());
+            if(amount != 0) {
+                $.confirm({
+                    title: '确认付款',
+                    text: '确认付款给 ' + $("#truename").val() + ' 金额 ' + $("#amount").val() + ' 元',
+                    onOK: function () {
+                        $.post("/admin/pay", {
+                                truename: $("#truename").val(),
+                                amount: amount*100 +"",
+                                openid: $("#openid").val()
+                            },
+                            function (data) {
+                                var msg = "向"+$("#truename").val()+"支付"+$("#amount").val()+"元";
+                                if(data.resulted=="success")
+                                    window.location.href="/admin/success?msg=付款成功，"+msg+"&stype=1";
+                                else
+                                    window.location.href="/admin/success?msg="+data.message+"&stype=0";
+
+                            }, "json");
+                    }
+                })
+            }
+            else
+                $.alert("金额不能小于等于0", "金额错误");
+        })
+
+        function dateFtt(fmt,date)
+        { //author: meizz
+            var o = {
+                "M+" : date.getMonth()+1,     //月份
+                "d+" : date.getDate(),     //日
+                "h+" : date.getHours(),     //小时
+                "m+" : date.getMinutes(),     //分
+                "s+" : date.getSeconds(),     //秒
+                "q+" : Math.floor((date.getMonth()+3)/3), //季度
+                "S" : date.getMilliseconds()    //毫秒
+            };
+            if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+            for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            return fmt;
+        }
+    })
+</script>
+</body>
+</html>

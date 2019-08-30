@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>更新你的信息</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="../css/weui.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body ontouchstart>
+<div class="weui-tab">
+    <div class="weui-navbar">
+        <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+            我的打款记录
+        </a>
+        <a class="weui-navbar__item" href="#tab2">
+            我的信息
+        </a>
+
+    </div>
+    <div class="weui-tab__bd">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <div class="demos-header">
+                <h1 class="demos-title">打款记录</h1>
+            </div>
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <p>标题文字</p>
+                    </div>
+                    <div class="weui-cell__ft">说明文字</div>
+                </div>
+            </div>
+        </div>
+        <div id="tab2" class="weui-tab__bd-item">
+            <div class="demos-header">
+                <h1 class="demos-title">我的信息</h1>
+            </div>
+            <div class="weui-cells__title">姓名</div>
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" id="truename" th:value="${user.truename}" name="truename" placeholder="请输入真实姓名">
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-cells__title">身份证</div>
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" id="idcardno" th:value="${user.idcardno}" name="idcardno" placeholder="请输入18位身份证号码">
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" th:value="${user.id}" name="id" />
+            <div class="weui-btn-area">
+                <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="../scripts/jquery-2.1.4.min.js"></script>
+<script src="../scripts/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script src="../scripts/jquery-weui-1.2.1.min.js"></script>
+
+
+<script>
+    $("#showTooltips").click(function() {
+        var truename = $('#truename').val();
+        var idcardno = $('#idcardno').val();
+        if(!truename) $.toptip('请输入真实姓名');
+        else if(!idcardno || !/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(idcardno)) $.toptip('请输入正确的身份证号码');
+        else{
+            $.post("/user/updateinfo", $('form').serialize(),
+                function(data){
+                    if(data)
+                        $.toast("更新成功");
+                    else
+                        $.toast("更新失败", "cancel");
+                }, "json");
+        } ;
+
+    });
+</script>
+
+</body>
+
+</html>

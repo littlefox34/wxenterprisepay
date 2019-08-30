@@ -1,0 +1,75 @@
+server:
+  port: 8085
+
+spring:
+  thymeleaf:
+    #模板的模式，支持 HTML, XML TEXT JAVASCRIPT
+    mode: HTML5
+    #编码 可不用配置
+    encoding: UTF-8
+    #开发配置为false,避免修改模板还要重启服务器
+    cache: false
+    suffix: .html
+  datasource:
+    url: jdbc:sqlserver://rdsfevmh006r4uoa4f25.sqlserver.rds.aliyuncs.com:3433;DatabaseName=wxxqpay
+    username: study
+    password: Xiaoqu123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    initial-size: 5
+    min-idle: 5
+    max-active: 20
+    # 配置获取连接等待超时的时间
+    max-wait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    time-between-eviction-runs-millis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 1 FROM DUAL
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    pool-prepared-statements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    max-pool-prepared-statement-per-connection-size: 20
+    filters: stat,wall
+    use-global-data-source-stat: true
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+###ThymeLeaf配置
+
+
+weixin4j:
+  #微信开发配置
+  config:
+    #开发者第三方用户唯一凭证
+    appid: wxd0717f239cc1f2c3
+    #开发者第三方用户唯一凭证密钥
+    secret: 6c900d4083ad42a974a9bec74c337855
+    #公众号原始ID
+    originalid: gh_8a0a1d9cb2ee
+    #消息加密方式 0:明文模式(默认), 1:兼容模式, 2:安全模式(推荐)
+    encodingtype: 2
+    #消息加密密钥(43位字符组成A-Za-z0-9)
+    encodingaeskey: galpRI5aRpvJaqTkuqrAxgL9G0kiaaxX9WagmCp7O2F
+    #网页安全授权URL
+    oauthUrl: /
+  #微信支付配置
+  payConfig:
+    #微信支付_商户ID，例如10000000001
+    partnerId: 1497128652
+    #微信支付_商户密钥，由商户设置32位字符
+    partnerKey: c62975fad1d10bd91ce453f76130b556
+    #微信支付_通知URL，异步接收微信支付结果的URL
+    notifyUrl:
+    #证书路径(pk12格式)，例如：/opt/cert/10000000001.pk12
+    certPath:
+    #证书密钥,默认为商户ID，例如：10000000001
+    certSecret:
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.xiaoqu6.wxenterprisepay.models

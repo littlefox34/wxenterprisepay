@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoqu6.wxenterprisepay.repositories.PayOrderMapper">
+  <resultMap id="BaseResultMap" type="com.xiaoqu6.wxenterprisepay.models.PayOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="truename" jdbcType="NVARCHAR" property="truename" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, truename, updatetime, amount, openid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from payorder
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from payorder
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xiaoqu6.wxenterprisepay.models.PayOrder">
+    insert into payorder (truename,
+      amount, openid)
+    values (#{truename,jdbcType=NVARCHAR},
+      #{amount,jdbcType=DECIMAL}, #{openid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiaoqu6.wxenterprisepay.models.PayOrder">
+    insert into payorder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="truename != null">
+        truename,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="truename != null">
+        #{truename,jdbcType=NVARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiaoqu6.wxenterprisepay.models.PayOrder">
+    update payorder
+    <set>
+      <if test="truename != null">
+        truename = #{truename,jdbcType=NVARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiaoqu6.wxenterprisepay.models.PayOrder">
+    update payorder
+    set truename = #{truename,jdbcType=NVARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      amount = #{amount,jdbcType=DECIMAL},
+      openid = #{openid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from payorder
+    where openid = #{openid,jdbcType=VARCHAR}
+  </select>
+</mapper>
